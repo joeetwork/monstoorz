@@ -20,10 +20,10 @@
         </a>
         <div class="flex items-center">
             <a
-                href="/info"
+                href="/traits"
                 class="link"
             >
-                Info
+                Traits
             </a>
             <a
                 href="/viewer"
