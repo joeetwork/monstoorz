@@ -2,23 +2,34 @@
     @import "../app.postcss";
 </style>
 
+<script>
+    import Icon from "$lib/assets/logo.png";
+</script>
+
 <main>
     <nav
         class="sticky top-0 left-0 flex w-full items-center justify-between bg-black p-3"
     >
-        <h1 class="text-xl">TESTDRIVE</h1>
+        <a href="/"
+            ><img
+                src={Icon}
+                width="70"
+                class="rounded hover:ring"
+                alt=""
+            />
+        </a>
         <div class="flex items-center">
             <a
-                href=""
+                href="/info"
                 class="link"
             >
-                Link 1
+                Info
             </a>
             <a
-                href=""
+                href="/viewer"
                 class="link"
             >
-                Link 2
+                Viewer
             </a>
         </div>
     </nav>
