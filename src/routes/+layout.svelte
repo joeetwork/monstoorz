@@ -19,10 +19,12 @@
                 <img
                     src={Icon}
                     width="50"
-                    class="rounded"
+                    class="hidden rounded sm:block"
                     alt=""
                 />
-                <h1 class="text-4xl font-bold text-yellow-500">Monstoorz</h1>
+                <h1 class="text-lg font-bold text-yellow-500 sm:text-4xl">
+                    Monstoorz
+                </h1>
             </div>
         </a>
 
