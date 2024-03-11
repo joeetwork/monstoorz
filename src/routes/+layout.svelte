@@ -8,7 +8,7 @@
 
 <main>
     <nav
-        class="sticky top-0 left-0 flex w-full items-center justify-between bg-black p-3"
+        class="sticky top-0 left-0 z-20 flex w-full items-center justify-between bg-black p-3"
     >
         <a href="/"
             ><img
