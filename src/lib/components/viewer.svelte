@@ -1560,11 +1560,30 @@
     }
 </script>
 
-<div id="monstoorzviewer">
-    {@html htmlContent}
+<div class="flex min-h-[500px] flex-col gap-4 lg:flex-row">
+    <div class="flex flex-1 flex-col items-center justify-center gap-4">
+        <h1 class="w-1/2 text-3xl font-bold">Monstoorz Viewer</h1>
+        <p class="w-1/2 text-lg">
+            Enter a $DMT-Monstoorz block number to generate a Monstoorz.
+        </p>
+
+        <div class="w-1/2">
+            <input
+                id="blk"
+                type="number"
+                class="input-bordered input-warning input w-full max-w-xs"
+                on:input={(e) => generateHtmlBasedOnBlockNumber(e.target.value)}
+            />
+        </div>
+    </div>
+
+    <div class="flex flex-1 flex-col items-center justify-center">
+        {#if htmlContent}
+            <div class="relative h-[425px] w-[425px]">
+                {@html htmlContent}
+            </div>
+        {:else}
+            <div class="h-[425px] w-[425px] bg-gray-300" />
+        {/if}
+    </div>
 </div>
-<input
-    id="blk"
-    type="number"
-    on:input={(e) => generateHtmlBasedOnBlockNumber(e.target.value)}
-/>
