@@ -4,7 +4,7 @@
 
 <div class="mx-auto max-w-xl py-10">
     <div class="flex flex-col items-center justify-center">
-        <h1 class="text-center text-4xl font-bold">
+        <h1 class="text-center text-xl font-bold lg:text-4xl">
             Bitcoin's favourite monstoorz <br /> Crafted with digital matter
         </h1>
 
