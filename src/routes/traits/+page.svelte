@@ -22,14 +22,18 @@
         >
             <button
                 role="tab"
-                class={`tab ${trait === "Core" && "tab-active"}`}
+                class={`tab font-bold ${
+                    trait === "Core" && "bg-yellow-500 text-black"
+                }`}
                 on:click={() => handleClick("Core")}
                 >Core
             </button>
 
             <button
                 role="tab"
-                class={`tab ${trait === "Special" && "tab-active"}`}
+                class={`tab font-bold  ${
+                    trait === "Special" && "bg-yellow-500 text-black"
+                }`}
                 on:click={() => handleClick("Special")}
                 >Special
             </button>
