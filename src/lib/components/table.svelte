@@ -4,28 +4,32 @@
 
 <div class="overflow-x-auto">
     {#each SPECIALPATTERNS as pattern}
-        <table class="mx-auto my-8 table">
+        <table class="mx-auto my-8 table w-full table-fixed">
             <thead>
                 <tr>
                     <th
                         class="text-center text-lg font-bold"
-                        colspan="3"
+                        colspan="3">{pattern.pattern}</th
                     >
-                        {pattern.pattern}
-                    </th>
                 </tr>
                 <tr>
-                    <th>Function</th>
-                    <th>Trait</th>
-                    <th>Frequency</th>
+                    <th class="w-1/3">Function</th>
+                    <th class="w-1/3">Trait</th>
+                    <th class="w-1/3">Frequency</th>
                 </tr>
             </thead>
             <tbody>
                 {#each pattern.traits as trait}
                     <tr>
-                        <td>{trait.function}</td>
-                        <td>{trait.trait}</td>
-                        <td>{trait.frequency}</td>
+                        <td class="whitespace-normal break-words"
+                            >{trait.function}</td
+                        >
+                        <td class="whitespace-normal break-words"
+                            >{trait.trait}</td
+                        >
+                        <td class="whitespace-normal break-words"
+                            >{trait.frequency}</td
+                        >
                     </tr>
                 {/each}
             </tbody>
