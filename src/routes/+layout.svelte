@@ -4,6 +4,10 @@
 
 <script>
     import Icon from "$lib/assets/logo.png";
+    import { page } from "$app/stores";
+    import { NAVLINKS } from "../constants";
+
+    $: activePath = $page.url.pathname;
 </script>
 
 <main>
@@ -18,19 +22,17 @@
                 alt=""
             />
         </a>
-        <div class="flex items-center">
-            <a
-                href="/traits"
-                class="link"
-            >
-                Traits
-            </a>
-            <a
-                href="/viewer"
-                class="link"
-            >
-                Viewer
-            </a>
+        <div class="flex items-center gap-6">
+            {#each NAVLINKS as { path, label }}
+                <a
+                    href={path}
+                    class={`text-xl hover:text-yellow-500 ${
+                        activePath === path && "text-yellow-500"
+                    }`}
+                >
+                    {label}
+                </a>
+            {/each}
         </div>
     </nav>
     <slot />

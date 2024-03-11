@@ -1,3 +1,8 @@
+export const NAVLINKS = [
+    { label: "Traits", path: "/traits" },
+    { label: "Viewer", path: "/viewer" },
+];
+
 export const PATTERNS = [
     {
         pattern: "Contains 420",
