@@ -1,5 +1,6 @@
 <script>
     import Table from "$lib/components/table.svelte";
+    import { SPECIALPATTERNS, COREPATTERNS } from "../../constants";
 
     let trait = "Core";
 
@@ -40,5 +41,5 @@
         </div>
     </div>
 
-    <Table />
+    <Table patterns={trait === "Special" ? SPECIALPATTERNS : COREPATTERNS} />
 </div>

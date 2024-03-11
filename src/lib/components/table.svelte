@@ -1,9 +1,18 @@
-<script>
-    import { SPECIALPATTERNS } from "../../constants";
+<script lang="ts">
+    interface PatternProps {
+        pattern: string;
+        traits: {
+            function: string;
+            trait: string;
+            frequency: string;
+        }[];
+    }
+
+    export let patterns: PatternProps[] = [];
 </script>
 
 <div class="overflow-x-auto">
-    {#each SPECIALPATTERNS as pattern}
+    {#each patterns as pattern}
         <table class="mx-auto my-8 table w-full table-fixed">
             <thead>
                 <tr>
