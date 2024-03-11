@@ -13,7 +13,7 @@
 </script>
 
 <div class="mx-auto max-w-lg py-10">
-    <div class="flex justify-around pb-4">
+    <div class="flex justify-around">
         <h1 class="text-3xl font-bold">Patterns</h1>
 
         <div
