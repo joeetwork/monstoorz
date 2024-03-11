@@ -1,9 +1,9 @@
 <script>
-    import { PATTERNS } from "../../constants";
+    import { SPECIALPATTERNS } from "../../constants";
 </script>
 
 <div class="overflow-x-auto">
-    {#each PATTERNS as pattern}
+    {#each SPECIALPATTERNS as pattern}
         <table class="mx-auto my-8 table">
             <thead>
                 <tr>
