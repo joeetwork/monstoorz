@@ -1,95 +1,98 @@
-'use client'
+"use client";
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from "react";
 
 export default function Viewer() {
+  const [htmlContent, setHtmlContent] = useState<string>("");
+  const [blockNumber, setBlockNumber] = useState<string>("");
 
-    const [htmlContent, setHtmlContent] = useState<string>("");
-    const [blockNumber, setBlockNumber] = useState<string>("");
+  // Define the color map with the given colors
+  const colorMap = {
+    // Orange
+    0: "#585663",
 
-    // Define the color map with the given colors
-    const colorMap = {
-        // Orange
-        0: "#585663",
+    1: "#6D2BF8",
 
-        1: "#6D2BF8",
+    // Purple
+    2: "#AF89FE",
 
-        // Purple
-        2: "#AF89FE",
+    // Lilac
+    3: "#FDF64D",
 
-        // Lilac
-        3: "#FDF64D",
+    // Yellow
+    4: "#2067F0",
 
-        // Yellow
-        4: "#2067F0",
+    // Blue
+    5: "#976F53",
 
-        // Blue
-        5: "#976F53",
+    // Brown
+    6: "#CBC7E3",
 
-        // Brown
-        6: "#CBC7E3",
+    // Light Grey
+    7: "#15D96F",
 
-        // Light Grey
-        7: "#15D96F",
+    // Green
+    8: "#FF64C1",
+    // Pink
+    9: "#F95E3C", // Grey
+  };
 
-        // Green
-        8: "#FF64C1",
-        // Pink
-        9: "#F95E3C", // Grey
-    };
+  // Define the color map with the given colors
+  const colorMap2 = {
+    // Orange
+    0: "#403F4A",
 
-    // Define the color map with the given colors
-    const colorMap2 = {
-        // Orange
-        0: "#403F4A",
+    1: "#5922CD",
 
-        1: "#5922CD",
+    // Purple
+    2: "#9C6EFE",
 
-        // Purple
-        2: "#9C6EFE",
+    // Lilac
+    3: "#FDE14D",
 
-        // Lilac
-        3: "#FDE14D",
+    // Yellow
+    4: "#1C54C0",
 
-        // Yellow
-        4: "#1C54C0",
+    // Blue
+    5: "#725540",
 
-        // Blue
-        5: "#725540",
+    // Brown
+    6: "#8F8DA5",
 
-        // Brown
-        6: "#8F8DA5",
+    // Light Grey
+    7: "#17B35F",
 
-        // Light Grey
-        7: "#17B35F",
+    // Green
+    8: "#F343AC",
+    // Pink
+    9: "#EC5331", // Dark Grey
+  };
 
-        // Green
-        8: "#F343AC",
-        // Pink
-        9: "#EC5331", // Dark Grey
-    };
+  function displayEyes(
+    originalString: string,
+    digits: number[],
+    lookType: string
+  ) {
+    //eyes
+    if (originalString.length >= 0) {
+      const eyeLidColor = () => {
+        if (lookType === "cyclops") {
+          return "#35491B";
+        }
 
-    function displayEyes(originalString: string, digits: number[], lookType: string) {
-        //eyes
-        if (originalString.length >= 0) {
-            const eyeLidColor = () => {
-                if (lookType === "cyclops") {
-                    return "#35491B";
-                }
+        if (lookType === "robot") {
+          return "#767679";
+        }
 
-                if (lookType === "robot") {
-                    return "#767679";
-                }
+        if (lookType === "alien") {
+          return "#1A7D84";
+        }
+      };
 
-                if (lookType === "alien") {
-                    return "#1A7D84";
-                }
-            };
+      //pupil colour
+      const colorForFirstDigit = colorMap[digits[0] as keyof typeof colorMap];
 
-            //pupil colour
-            const colorForFirstDigit = colorMap[digits[0] as keyof typeof colorMap];
-
-            const singleEye = `
+      const singleEye = `
   <div style="position: absolute; top: 176px; left: 186px;">
     <svg width="60" height="80" viewBox="0 0 138 144" fill="none" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="69" cy="71" rx="69" ry="67" fill="white"/>
@@ -99,7 +102,7 @@ export default function Viewer() {
   </div>
 `;
 
-            const fourEyes = `
+      const fourEyes = `
   <div style="position: absolute; top: 143px; left: 167px;">
     <svg width="100" height="100" viewBox="0 0 83 65" fill="none" xmlns="http://www.w3.org/2000/svg">
 <ellipse cx="41.977" cy="53.7903" rx="10.9713" ry="11.2098" fill="white"/>
@@ -119,7 +122,7 @@ export default function Viewer() {
   </div>
 `;
 
-            const fiveEyes = `
+      const fiveEyes = `
   <div style="position: absolute; top: 159px; left: 123px;">
     <svg width="180" height="100" viewBox="0 0 419 138" fill="none" xmlns="http://www.w3.org/2000/svg">
       <ellipse cx="109.263" cy="37.25" rx="34.263" ry="33.264" fill="white"/>
@@ -141,29 +144,32 @@ export default function Viewer() {
   </div>
 `;
 
-            //using fifth digit
-            const eyeType = {
-                0: fiveEyes,
-                1: singleEye,
-                2: singleEye,
-                3: singleEye,
-                4: fiveEyes,
-                5: fourEyes,
-                6: fourEyes,
-                7: fourEyes,
-                8: fourEyes,
-                9: fiveEyes,
-            };
+      //using fifth digit
+      const eyeType = {
+        0: fiveEyes,
+        1: singleEye,
+        2: singleEye,
+        3: singleEye,
+        4: fiveEyes,
+        5: fourEyes,
+        6: fourEyes,
+        7: fourEyes,
+        8: fourEyes,
+        9: fiveEyes,
+      };
 
-            return `${
-                originalString.length >= 5 ? eyeType[digits[4] as keyof typeof eyeType] : singleEye
-            }`;
-        }
+      return `${
+        originalString.length >= 5
+          ? eyeType[digits[4] as keyof typeof eyeType]
+          : singleEye
+      }`;
     }
+  }
 
-    function displayBackground(digits: number[], lookType: string) {
-        const colorForSecondDigit = colorMap2[digits[1] as keyof typeof colorMap2] || "transparent";
-        return `
+  function displayBackground(digits: number[], lookType: string) {
+    const colorForSecondDigit =
+      colorMap2[digits[1] as keyof typeof colorMap2] || "transparent";
+    return `
         <div style="position: absolute; top: 0px; left: 0px; z-index:-1;">
             <svg width="425" height="425" viewBox="0 0 425 425" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <rect width="425" height="425" fill="${colorForSecondDigit}"/>
@@ -171,43 +177,42 @@ export default function Viewer() {
         </div>
 
         `;
+  }
+
+  //nft type
+  function getLook(number: number) {
+    const numberStr = number.toString();
+    const lastFourDigits = parseInt(numberStr.substring(numberStr.length - 4));
+
+    if (lastFourDigits < 4800) {
+      return "cyclops";
+    } else if (lastFourDigits >= 4800 && lastFourDigits <= 5200) {
+      return "alien";
+    } else {
+      return "robot";
     }
+  }
 
-    //nft type
-    function getLook(number: number) {
-        const numberStr = number.toString();
-        const lastFourDigits = parseInt(
-            numberStr.substring(numberStr.length - 4)
-        );
+  function generateLookSvg(digits: number[], lookType: string) {
+    const bodyColor = () => {
+      if (lookType === "cyclops") {
+        return "#206227";
+      }
 
-        if (lastFourDigits < 4800) {
-            return "cyclops";
-        } else if (lastFourDigits >= 4800 && lastFourDigits <= 5200) {
-            return "alien";
-        } else {
-            return "robot";
-        }
-    }
+      if (lookType === "robot") {
+        return "#AAA9AD";
+      }
 
-    function generateLookSvg(digits: number[], lookType: string) {
-        const bodyColor = () => {
-            if (lookType === "cyclops") {
-                return "#206227";
-            }
+      if (lookType === "alien") {
+        return "#32BDC6";
+      }
+    };
 
-            if (lookType === "robot") {
-                return "#AAA9AD";
-            }
+    // colour ear tips
+    const colorForThirdDigit =
+      colorMap2[digits[2] as keyof typeof colorMap2] || "transparent";
 
-            if (lookType === "alien") {
-                return "#32BDC6";
-            }
-        };
-
-        // colour ear tips
-        const colorForThirdDigit = colorMap2[digits[2] as keyof typeof colorMap2] || "transparent";
-
-        const head = `
+    const head = `
   <div style="position: absolute; top: 138px; left: 105px;">
     <svg width="215" height="209" viewBox="0 0 215 209" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path fill-rule="evenodd" clip-rule="evenodd" d="M-3.8147e-06 0H215V188C215 195.732 207.732 203 200 203H15C7.267 203 -3.8147e-06 195.732 -3.8147e-06 188V0Z" fill="${bodyColor()}"/>
@@ -215,7 +220,7 @@ export default function Viewer() {
   </div>
 `;
 
-        const ears = `
+    const ears = `
   <div style="position: absolute; top: 136px; left: 46px; z-index:3;">
     <svg width="330" height="125" viewBox="0 0 775 125" fill="none" xmlns="http://www.w3.org/2000/svg">
       <rect x="83" y="51" width="85.6155" height="42.0018" transform="rotate(24.0638 83 51)" fill="${bodyColor()}"/>
@@ -228,7 +233,7 @@ export default function Viewer() {
   </div>
 `;
 
-        const neck = `
+    const neck = `
   <div style="position: absolute; top: 315px; left: 57px;">
     <svg width="300" height="110" viewBox="0 0 671 240" fill="none" xmlns="http://www.w3.org/2000/svg">
       <g clip-path="url(#clip0_9_57)">
@@ -244,167 +249,185 @@ export default function Viewer() {
   </div>
 `;
 
-        let lookHtml = "";
+    let lookHtml = "";
 
-        if (lookType === "cyclops") {
-            lookHtml = `
+    if (lookType === "cyclops") {
+      lookHtml = `
     ${head}
     ${ears}
     ${neck}
   `;
-        } else if (lookType === "robot") {
-            lookHtml = `
+    } else if (lookType === "robot") {
+      lookHtml = `
     ${head}
     ${ears}
     ${neck}
   `;
-        } else if (lookType === "alien") {
-            lookHtml = `
+    } else if (lookType === "alien") {
+      lookHtml = `
     ${head}
     ${ears}
     ${neck}
   `;
-        }
-        return lookHtml;
     }
+    return lookHtml;
+  }
 
-    function c420(number: number) {
-        const numberStr = number.toString();
-        return numberStr.includes("420");
-    }
+  function c420(number: number) {
+    const numberStr = number.toString();
+    return numberStr.includes("420");
+  }
 
-    function displayDiamond() {
-        return `<div style="position: absolute; top: 370px; left: 181.5px; z-index: 5;">
+  function displayDiamond() {
+    return `<div style="position: absolute; top: 370px; left: 181.5px; z-index: 5;">
 <svg width="10" height="32" viewBox="0 0 28 32" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M20.9389 0.393633L27.8526 12.8181L20.8858 28.325L7.00544 31.4075L0.0917893 18.983L7.05852 3.47607L20.9389 0.393633Z" fill="#00F0FF"/>
 </svg>
 
     </div>`;
-    }
+  }
 
-    function displayMouth(originalString: string, digits: number[], bunnyTeeth: string) {
-        //mouth
-        //mouth color
-        const colorForSixthDigit =
-            originalString.length >= 6 ? colorMap[digits[5] as keyof typeof colorMap] : "black";
+  function displayMouth(
+    originalString: string,
+    digits: number[],
+    bunnyTeeth: string
+  ) {
+    //mouth
+    //mouth color
+    const colorForSixthDigit =
+      originalString.length >= 6
+        ? colorMap[digits[5] as keyof typeof colorMap]
+        : "black";
 
-        //tooth colour
-        const colorForFourthDigit =
-            originalString.length >= 4 ? colorMap2[digits[3] as keyof typeof colorMap2] : "#D9D9D9";
+    //tooth colour
+    const colorForFourthDigit =
+      originalString.length >= 4
+        ? colorMap2[digits[3] as keyof typeof colorMap2]
+        : "#D9D9D9";
 
-        return `
+    return `
   <div style="position: absolute; top: 281px; left:146px; z-index-1">
     <svg width="150" height="75" viewBox="0 0 190 162" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M190 81C190 70.3629 187.543 59.83 182.769 50.0026C177.994 40.1753 170.997 31.2459 162.175 23.7243C153.354 16.2028 142.881 10.2364 131.355 6.16576C119.829 2.09513 107.476 -4.64961e-07 95 0C82.5244 4.64961e-07 70.171 2.09513 58.6451 6.16576C47.1191 10.2364 36.6464 16.2028 27.8249 23.7244C19.0033 31.2459 12.0056 40.1753 7.23144 50.0026C2.45725 59.83 -1.09065e-06 70.3629 0 81L95 81H190Z" fill="${colorForSixthDigit}"/>
       
     ${
-        !bunnyTeeth
-            ? `<path d="M43.6306 44.2193L57.8778 81.1561L28.4354 80.7763L43.6306 44.2193Z" fill="${colorForFourthDigit}"/>
+      !bunnyTeeth
+        ? `<path d="M43.6306 44.2193L57.8778 81.1561L28.4354 80.7763L43.6306 44.2193Z" fill="${colorForFourthDigit}"/>
     <path d="M138 47.0444L152.811 80.8308L123.366 80.9078L138 47.0444Z" fill="#D9D9D9"/>`
-            : ""
+        : ""
     }
     </svg>
   </div>
 
   ${bunnyTeeth ? bunnyTeeth : ""}
 `;
+  }
+
+  function c4a0(number: number) {
+    const numberStr = number.toString();
+
+    if (numberStr.includes("420")) {
+      return false;
     }
 
-    function c4a0(number: number) {
-        const numberStr = number.toString();
+    return numberStr.includes("4") && numberStr.includes("0");
+  }
 
-        if (numberStr.includes("420")) {
-            return false;
-        }
-
-        return numberStr.includes("4") && numberStr.includes("0");
-    }
-
-    function displaycig() {
-        return `<div style="position: absolute; top: 226px; left: 251px; z-index: 5;">
+  function displaycig() {
+    return `<div style="position: absolute; top: 226px; left: 251px; z-index: 5;">
         <svg width="72" height="92" viewBox="0 0 72 92" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="72" y="92" width="72" height="18" transform="rotate(-180 72 92)" fill="#FBFBFB"/>
             <rect x="72" y="56" width="18" height="56" transform="rotate(-180 72 56)" fill="#EEEEEE" fill-opacity="0.3"/>
             <rect x="72" y="92" width="18" height="18" transform="rotate(-180 72 92)" fill="#FF0034"/>
         </svg>
     </div>`;
+  }
+
+  function c0(number: number) {
+    const numberStr = number.toString();
+
+    if (numberStr.includes("00")) {
+      return false;
     }
 
-    function c0(number: number) {
-        const numberStr = number.toString();
-
-        if (numberStr.includes("00")) {
-            return false;
-        }
-
-        if (numberStr.includes("0")) {
-            return true;
-        }
+    if (numberStr.includes("0")) {
+      return true;
     }
+  }
 
-    function displaySquint(lookType: string, eyeType: string) {
-        const eyeLidColor = () => {
-            if (lookType === "cyclops") {
-                return "#35491B";
-            }
+  function displaySquint(lookType: string, eyeType: string) {
+    const eyeLidColor = () => {
+      if (lookType === "cyclops") {
+        return "#35491B";
+      }
 
-            if (lookType === "robot") {
-                return "#767679";
-            }
+      if (lookType === "robot") {
+        return "#767679";
+      }
 
-            if (lookType === "alien") {
-                return "#1A7D84";
-            }
-        };
+      if (lookType === "alien") {
+        return "#1A7D84";
+      }
+    };
 
-        const eyeSquint = ({ top, left, width, height }: { top: number, left: number, width: number, height: number }) => {
-            return `
+    const eyeSquint = ({
+      top,
+      left,
+      width,
+      height,
+    }: {
+      top: number;
+      left: number;
+      width: number;
+      height: number;
+    }) => {
+      return `
       <div style="position: absolute; top: ${top}px; left: ${left}px; z-index:2;">
         <svg width="${width}" height="${height}" viewBox="0 0 135 53" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M0.5 0.5C0.5 13.363 12.06 29.6992 25 38.7947C37.94 47.8902 49.7001 53 68 53C86.2999 53 98.06 47.8902 111 38.7947C123.94 29.6992 135 13.363 135 0.5L68 4.5L0.5 0.5Z" fill="${eyeLidColor()}"/>
 </svg>
 </div>
       `;
-        };
+    };
 
-        if (eyeType === "four_eyes") {
-            return `
+    if (eyeType === "four_eyes") {
+      return `
       ${eyeSquint({ height: 53, left: 166.5, top: 181.5, width: 27.2 })}
       ${eyeSquint({ height: 53, left: 197, top: 158.5, width: 37.2 })}
       ${eyeSquint({ height: 53, left: 204.5, top: 200.5, width: 27.2 })}
       ${eyeSquint({ height: 53, left: 240.5, top: 181.5, width: 27.2 })}
 `;
-        }
+    }
 
-        if (eyeType === "five_eyes") {
-            return `
+    if (eyeType === "five_eyes") {
+      return `
       ${eyeSquint({ height: 53, left: 123, top: 194, width: 25 })}
       ${eyeSquint({ height: 53, left: 155, top: 178, width: 30 })}
       ${eyeSquint({ height: 53, left: 197, top: 203, width: 37 })}
       ${eyeSquint({ height: 53, left: 277, top: 193, width: 25 })}
       ${eyeSquint({ height: 53, left: 241, top: 177, width: 30 })}  
     `;
-        }
+    }
 
-        return `
+    return `
     ${eyeSquint({ height: 53, left: 186, top: 207, width: 60 })}
 `;
+  }
+
+  function c00(number: number) {
+    const numberStr = number.toString();
+
+    if (numberStr.includes("000")) {
+      return false;
     }
 
-    function c00(number: number) {
-        const numberStr = number.toString();
-
-        if (numberStr.includes("000")) {
-            return false;
-        }
-
-        if (numberStr.includes("00")) {
-            return true;
-        }
+    if (numberStr.includes("00")) {
+      return true;
     }
+  }
 
-    function displayTash() {
-        return `<div style="position: absolute; top: 269px;
+  function displayTash() {
+    return `<div style="position: absolute; top: 269px;
     left: 175px;
     z-index: 1;">
     <svg width="90" height="27" viewBox="0 0 120 27" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -414,23 +437,28 @@ export default function Viewer() {
 </svg>
 
     </div>`;
+  }
+
+  function c000(number: number) {
+    const numberStr = number.toString();
+
+    if (numberStr.includes("0000")) {
+      return false;
     }
 
-    function c000(number: number) {
-        const numberStr = number.toString();
-
-        if (numberStr.includes("0000")) {
-            return false;
-        }
-
-        if (numberStr.includes("000")) {
-            return true;
-        }
+    if (numberStr.includes("000")) {
+      return true;
     }
+  }
 
-    function displayEyeLash(eyeType: string) {
-        const eyeLash = (top: number, left: number, width: number, height: number) => {
-            return `<div style="position: absolute; top: ${top}px; left: ${left}px; z-index:3;">
+  function displayEyeLash(eyeType: string) {
+    const eyeLash = (
+      top: number,
+      left: number,
+      width: number,
+      height: number
+    ) => {
+      return `<div style="position: absolute; top: ${top}px; left: ${left}px; z-index:3;">
       <svg width="${width}" height="${height}" viewBox="0 0 141 76" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="15.44" y1="2.42" x2="1.44" y2="50.42" stroke="black" stroke-width="3"/>
 <line x1="124.39" y1="1.43644" x2="139.39" y2="38.4364" stroke="black" stroke-width="3"/>
@@ -444,55 +472,65 @@ export default function Viewer() {
 </svg>
 </div>
 `;
-        };
+    };
 
-        if (eyeType === "four_eyes") {
-            return `
+    if (eyeType === "four_eyes") {
+      return `
       ${eyeLash(164, 196, 40, 40)}
       ${eyeLash(195, 239, 30, 20)}
       ${eyeLash(195, 164, 30, 20)}
       ${eyeLash(214, 202, 30, 20)}
       `;
-        }
+    }
 
-        if (eyeType === "five_eyes") {
-            return `
+    if (eyeType === "five_eyes") {
+      return `
       ${eyeLash(208, 196, 40, 40)}
       ${eyeLash(191, 241, 30, 20)}
       ${eyeLash(193, 155, 30, 20)}
       ${eyeLash(209, 121, 30, 20)}
       ${eyeLash(209, 275, 30, 20)}
     `;
-        }
+    }
 
-        return `
+    return `
     ${eyeLash(210, 185, 60, 40)}`;
+  }
+
+  function c0000(number: number) {
+    const numberStr = number.toString();
+    if (numberStr.includes("00000")) {
+      return false;
     }
 
-    function c0000(number: number) {
-        const numberStr = number.toString();
-        if (numberStr.includes("00000")) {
-            return false;
-        }
-
-        if (numberStr.includes("0000")) {
-            return true;
-        }
+    if (numberStr.includes("0000")) {
+      return true;
     }
+  }
 
-    function displayMonocle() {
-        return `<div style="position: absolute; top: 185px; left: 129px; z-index:4;">
+  function displayMonocle() {
+    return `<div style="position: absolute; top: 185px; left: 129px; z-index:4;">
         <svg width="119" height="182" viewBox="0 0 119 182" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M59.143 30.6357C59.143 44.8939 71.2524 56.7714 86.5917 56.7714C101.931 56.7714 114.04 44.8939 114.04 30.6357C114.04 16.3775 101.931 4.5 86.5917 4.5C71.2524 4.5 59.143 16.3775 59.143 30.6357Z" fill="#A7C7CB" fill-opacity="0.65" stroke="#FFD700" stroke-width="9"/>
 <path d="M62.5208 47.7041C62.4007 48.7522 60.8817 49.7839 60.249 50.5679C58.8034 52.3591 57.8594 54.1545 57.0937 56.3201C55.6385 60.4359 55.4381 65.0428 54.3423 69.293C50.5789 83.8906 34.1222 90.2081 22.5373 97.9314C17.9728 100.974 14.3787 105.674 11.0774 109.925C5.62651 116.944 2.99997 125.975 2.99997 134.672C2.99997 149.448 2.99997 164.224 2.99997 179" stroke="#FFD700" stroke-width="5" stroke-linecap="round"/>
 </svg>
 
     </div>`;
-    }
+  }
 
-    function displayBloodShot(eyeType: string) {
-        const bloodShot = ({ top, left, height, width }: { top: number, left: number, height: number, width: number }) => {
-            return `
+  function displayBloodShot(eyeType: string) {
+    const bloodShot = ({
+      top,
+      left,
+      height,
+      width,
+    }: {
+      top: number;
+      left: number;
+      height: number;
+      width: number;
+    }) => {
+      return `
         <div style="position: absolute; top: ${top}px; left: ${left}px; z-index:1;">
             <svg width="${width}" height="${height}" viewBox="0 0 110 57" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -521,89 +559,89 @@ export default function Viewer() {
                     />
             </svg>
         </div>`;
-        };
+    };
 
-        if (eyeType === "four_eyes") {
-            return `
+    if (eyeType === "four_eyes") {
+      return `
       ${bloodShot({ height: 50, left: 204, top: 199, width: 22 })}
       ${bloodShot({ height: 50, left: 198, top: 157, width: 28 })}
       ${bloodShot({ height: 50, left: 240, top: 180, width: 23 })}
       ${bloodShot({ height: 50, left: 168, top: 181, width: 21 })}
 `;
-        }
+    }
 
-        if (eyeType === "five_eyes") {
-            return `
+    if (eyeType === "five_eyes") {
+      return `
       ${bloodShot({ height: 40, left: 197, top: 206, width: 31 })}
       ${bloodShot({ height: 40, left: 278, top: 197, width: 20 })}
       ${bloodShot({ height: 40, left: 242, top: 180, width: 23 })}
       ${bloodShot({ height: 40, left: 156, top: 181, width: 23 })}
       ${bloodShot({ height: 40, left: 124, top: 198, width: 20 })}    
     `;
-        }
+    }
 
-        return `
+    return `
     ${bloodShot({ height: 50, left: 189, top: 203, width: 45 })}
     `;
+  }
+
+  function c00000(number: number) {
+    const numberStr = number.toString();
+    return numberStr.includes("00000");
+  }
+
+  function c11(number: number) {
+    const numberStr = number.toString();
+    if (numberStr.includes("111")) {
+      return false;
     }
 
-    function c00000(number: number) {
-        const numberStr = number.toString();
-        return numberStr.includes("00000");
+    if (numberStr.includes("11")) {
+      return true;
     }
+  }
 
-    function c11(number: number) {
-        const numberStr = number.toString();
-        if (numberStr.includes("111")) {
-            return false;
-        }
-
-        if (numberStr.includes("11")) {
-            return true;
-        }
-    }
-
-    function displayStud() {
-        return `<div style="position: absolute; top: 196px; left: 352px; z-index: 4;">
+  function displayStud() {
+    return `<div style="position: absolute; top: 196px; left: 352px; z-index: 4;">
       <svg width="14" height="24" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 <ellipse cx="14" cy="12" rx="14" ry="12" fill="#FFD700"/>
 </svg>
     </div>`;
+  }
+
+  function c111(number: number) {
+    const numberStr = number.toString();
+    if (numberStr.includes("1111")) {
+      return false;
     }
 
-    function c111(number: number) {
-        const numberStr = number.toString();
-        if (numberStr.includes("1111")) {
-            return false;
-        }
-
-        if (numberStr.includes("111")) {
-            return true;
-        }
+    if (numberStr.includes("111")) {
+      return true;
     }
+  }
 
-    function displayEarWound() {
-        return `<div style="position: absolute; top: 188.5px; left: 319px; z-index: 4;">
+  function displayEarWound() {
+    return `<div style="position: absolute; top: 188.5px; left: 319px; z-index: 4;">
       <svg width="20" height="29" viewBox="0 0 30 29" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M0.5 10.5L10.5 6L23 0.5L21.7969 15.3333L30 19.3333L13.2031 16.3333L5 28.9999L8.125 11.6666L0.5 10.5Z" fill="black"/>
 </svg>
 
     </div>`;
+  }
+
+  function c1111(number: number) {
+    const numberStr = number.toString();
+    if (numberStr.includes("11111")) {
+      return false;
     }
 
-    function c1111(number: number) {
-        const numberStr = number.toString();
-        if (numberStr.includes("11111")) {
-            return false;
-        }
-
-        if (numberStr.includes("1111")) {
-            return true;
-        }
+    if (numberStr.includes("1111")) {
+      return true;
     }
+  }
 
-    function displayHoops() {
-        return `<div style="position: absolute; top: 154px; left: 46px; z-index: 4;">
+  function displayHoops() {
+    return `<div style="position: absolute; top: 154px; left: 46px; z-index: 4;">
         
 <svg width="40" height="199" viewBox="0 0 75 199" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M71 99.5C71 126.622 66.85 150.997 60.2735 168.446C56.9798 177.186 53.1547 183.981 49.1103 188.52C45.0628 193.062 41.1309 195 37.5 195C33.8691 195 29.9372 193.062 25.8897 188.52C21.8453 183.981 18.0202 177.186 14.7265 168.446C8.15 150.997 4 126.622 4 99.5C4 72.3784 8.15 48.0032 14.7265 30.5536C18.0202 21.8143 21.8453 15.0192 25.8897 10.4803C29.9372 5.93794 33.8691 4 37.5 4C41.1309 4 45.0628 5.93794 49.1103 10.4803C53.1547 15.0192 56.9798 21.8143 60.2735 30.5536C66.85 48.0032 71 72.3784 71 99.5Z" stroke="#FFD700" stroke-width="8"/>
@@ -617,15 +655,15 @@ export default function Viewer() {
         </svg>
             </div>
     `;
-    }
+  }
 
-    function c11111(number: number) {
-        const numberStr = number.toString();
-        return numberStr.includes("11111");
-    }
+  function c11111(number: number) {
+    const numberStr = number.toString();
+    return numberStr.includes("11111");
+  }
 
-    function displayHeadphones() {
-        return `<div style="position: absolute; top: 158px; left: 51px; z-index:4;">
+  function displayHeadphones() {
+    return `<div style="position: absolute; top: 158px; left: 51px; z-index:4;">
       <svg width="320" height="103" viewBox="0 0 740 103" fill="none" xmlns="http://www.w3.org/2000/svg">
 <ellipse cx="710" cy="20.5" rx="30" ry="16.5" fill="#D9D9D9"/>
 <rect x="722.284" y="21" width="18" height="68" transform="rotate(15.5977 722.284 21)" fill="#D9D9D9"/>
@@ -635,40 +673,40 @@ export default function Viewer() {
 <path d="M39.5 52C42.5861 52 45.6419 51.4698 48.4931 50.4395C51.3442 49.4093 53.9348 47.8993 56.117 45.9957C58.2992 44.0921 60.0302 41.8322 61.2112 39.345C62.3922 36.8578 63 34.1921 63 31.5C63 28.8079 62.3922 26.1422 61.2112 23.655C60.0302 21.1678 58.2992 18.9079 56.117 17.0043C53.9348 15.1007 51.3442 13.5907 48.4931 12.5605C45.6419 11.5302 42.5861 11 39.5 11L39.5 31.5L39.5 52Z" fill="black"/>
 </svg>
             </div>`;
-    }
+  }
 
-    function c8a8(number: number) {
-        const numberStr = number.toString();
-        if (numberStr.includes("888")) {
-            return false;
-        }
-        const count = (numberStr.match(/8/g) || []).length;
-        return count >= 2 ? "c8a8" : null;
+  function c8a8(number: number) {
+    const numberStr = number.toString();
+    if (numberStr.includes("888")) {
+      return false;
     }
+    const count = (numberStr.match(/8/g) || []).length;
+    return count >= 2 ? "c8a8" : null;
+  }
 
-    function displayNecklace() {
-        return `<div style="position: absolute; top: 315px; left: 144px; z-index: 4;">
+  function displayNecklace() {
+    return `<div style="position: absolute; top: 315px; left: 144px; z-index: 4;">
 <svg width="126" height="90" viewBox="0 0 290 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M285.021 5C274.652 6.15216 265.657 19.597 255.269 20.7512C243.862 22.0186 232.884 33.7957 221.142 36.4052C202.842 40.4717 188.005 47.6188 168.151 48.7533C156.058 49.4444 144.329 50.5035 131.885 50.5035C120.797 50.5035 105.048 46.3869 95.1319 40.8777C84.6171 35.0362 73.2296 33.1026 62.7544 28.1407C44.4408 19.4658 22.3562 18.3209 5 6.75013" stroke="#5D514D" stroke-width="9" stroke-linecap="round"/>
 <ellipse cx="97.7781" cy="64.4886" rx="13" ry="20" transform="rotate(22.9868 97.7781 64.4886)" fill="#B79232"/>
 </svg>
     </div>
     `;
+  }
+
+  function c88(number: number) {
+    const numberStr = number.toString();
+    if (numberStr.includes("888")) {
+      return false;
     }
 
-    function c88(number: number) {
-        const numberStr = number.toString();
-        if (numberStr.includes("888")) {
-            return false;
-        }
-
-        if (numberStr.includes("88")) {
-            return true;
-        }
+    if (numberStr.includes("88")) {
+      return true;
     }
+  }
 
-    function displayScarf() {
-        return `<div style="position: absolute; top: 275px; left: 145px; z-index:5">
+  function displayScarf() {
+    return `<div style="position: absolute; top: 275px; left: 145px; z-index:5">
       <svg width="145" height="150" viewBox="0 0 327 20" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M0 0L136.919 21.6593L283 0V50.3704L136.919 68L0 50.3704V0Z" fill="#671821"/>
 <path d="M138 51.1968L163.247 21.4352L326.622 143.803L262.344 153.762L138 51.1968Z" fill="#671821"/>
@@ -676,21 +714,21 @@ export default function Viewer() {
 <path d="M192 42C192 61.8823 174.091 78 152 78C129.909 78 112 61.8823 112 42C112 22.1178 129.909 18.5 152 18.5C174.091 18.5 192 22.1178 192 42Z" fill="#490A12"/>
 </svg>
     </div>`;
+  }
+
+  function c888(number: number) {
+    const numberStr = number.toString();
+    if (numberStr.includes("8888")) {
+      return false;
     }
 
-    function c888(number: number    ) {
-        const numberStr = number.toString();
-        if (numberStr.includes("8888")) {
-            return false;
-        }
-
-        if (numberStr.includes("888")) {
-            return true;
-        }
+    if (numberStr.includes("888")) {
+      return true;
     }
+  }
 
-    function displayTShirt() {
-        return `<div style="position: absolute; top: 328.5px; left: 71px; z-index: 3;">
+  function displayTShirt() {
+    return `<div style="position: absolute; top: 328.5px; left: 71px; z-index: 3;">
 
       <svg width="270" height="96" viewBox="0 0 590 160" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M288.633 73.6353L581.237 189.332L1 189.332L288.633 73.6353Z" fill="#2874E5"/>
@@ -707,21 +745,21 @@ export default function Viewer() {
 </svg>
 
     </div>`;
+  }
+
+  function c8888(number: number) {
+    const numberStr = number.toString();
+    if (numberStr.includes("88888")) {
+      return false;
     }
 
-    function c8888(number: number) {
-        const numberStr = number.toString();
-        if (numberStr.includes("88888")) {
-            return false;
-        }
-
-        if (numberStr.includes("8888")) {
-            return true;
-        }
+    if (numberStr.includes("8888")) {
+      return true;
     }
+  }
 
-    function displayHighVis() {
-        return `<div style="position: absolute; top: 337.7px; left: 47px; z-index: 3;">
+  function displayHighVis() {
+    return `<div style="position: absolute; top: 337.7px; left: 47px; z-index: 3;">
 <svg width="320" height="87" viewBox="0 0 600 190" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M437.407 65.8494L351.5 195L592.184 195.406L437.407 65.8494Z" fill="#DFFF00"/>
 <path d="M161.5 67.5L274.5 195L0.845431 194.526L161.5 67.5Z" fill="#DFFF00"/>
@@ -737,15 +775,15 @@ export default function Viewer() {
 <path d="M133.5 89H278L276.197 107H112L133.5 89Z" fill="#D9D9D9"/>
 </svg>
     </div>`;
-    }
+  }
 
-    function c88888(number: number) {
-        const numberStr = number.toString();
-        return numberStr.includes("88888");
-    }
+  function c88888(number: number) {
+    const numberStr = number.toString();
+    return numberStr.includes("88888");
+  }
 
-    function displaySuit() {
-        return `<div style="position: absolute; top: 335px; left: 59.5px; z-index: 3;">
+  function displaySuit() {
+    return `<div style="position: absolute; top: 335px; left: 59.5px; z-index: 3;">
 
 <svg width="290" height="90" viewBox="0 0 600 205" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M286.156 39.5L302.507 43.5L319.881 49L334.189 47.5L350.541 42L346.453 62L290.243 62L286.156 39.5Z" fill="#D9D9D9"/>
@@ -765,61 +803,61 @@ export default function Viewer() {
 <path d="M310.683 77L328.057 77L328.057 207L319.37 207L310.683 207L310.683 77Z" fill="black"/>
 </svg>
 </div>`;
-    }
+  }
 
-    function cp6(number: number) {
-        const numberStr = number.toString();
-        // Loop through the number string
-        for (let i = 0; i <= numberStr.length - 6; i++) {
-            // Ensure there are at least 6 characters to check
-            const substring = numberStr.substring(i, i + 6); // Get the substring of 6 characters
-            // Check if the substring is a palindrome
-            if (substring === substring.split("").reverse().join("")) {
-                return "cp6";
-            }
-        }
-        return null;
+  function cp6(number: number) {
+    const numberStr = number.toString();
+    // Loop through the number string
+    for (let i = 0; i <= numberStr.length - 6; i++) {
+      // Ensure there are at least 6 characters to check
+      const substring = numberStr.substring(i, i + 6); // Get the substring of 6 characters
+      // Check if the substring is a palindrome
+      if (substring === substring.split("").reverse().join("")) {
+        return "cp6";
+      }
     }
+    return null;
+  }
 
-    function displayGoatee() {
-        return `<div style="position: absolute; top: 303px; left: 195px;">
+  function displayGoatee() {
+    return `<div style="position: absolute; top: 303px; left: 195px;">
       <svg width="50" height="67" viewBox="0 0 90 67" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M45 67L0.832703 0.25H89.1673L45 67Z" fill="#43291A"/>
 </svg>
     </div>`;
-    }
+  }
 
-    function c9a9(number: number) {
-        const numberStr = number.toString();
-        if (numberStr.includes("99")) {
-            return false;
-        }
-        const count = (numberStr.match(/9/g) || []).length;
-        return count >= 2 ? "c9a9" : null;
+  function c9a9(number: number) {
+    const numberStr = number.toString();
+    if (numberStr.includes("99")) {
+      return false;
     }
+    const count = (numberStr.match(/9/g) || []).length;
+    return count >= 2 ? "c9a9" : null;
+  }
 
-    function displayBalloon() {
-        return `<div style="position: absolute; top: 223px; left: 302px; z-index: 6;">              
+  function displayBalloon() {
+    return `<div style="position: absolute; top: 223px; left: 302px; z-index: 6;">              
 <svg width="97" height="202" viewBox="0 0 97 190" fill="none" xmlns="http://www.w3.org/2000/svg">
 <ellipse cx="48.6159" cy="48.2961" rx="35.3878" ry="45.0887" transform="rotate(4.99072 48.6159 48.2961)" fill="#A31818"/>
 <path d="M45.2955 93.2664C45.082 94.7168 44.3114 95.8964 43.7116 97.22C42.2068 100.541 41.9713 103.976 41.6587 107.556C41.1609 113.257 41.4884 116.303 44.8098 121.119C49.655 128.145 56.6132 132.607 64.1314 136.446C67.643 138.239 71.4545 139.87 74.0488 142.944C82.0003 152.365 85.32 159.083 81.1128 170.972C78.905 177.211 72.4432 181.18 67.6929 185.332C63.5855 188.922 61.914 195.22 59.0853 199.804" stroke="black" stroke-width="2" stroke-linecap="round"/>
 </svg>
     </div>`;
+  }
+
+  function c99(number: number) {
+    const numberStr = number.toString();
+    if (numberStr.includes("999")) {
+      return false;
     }
 
-    function c99(number: number) {
-        const numberStr = number.toString();
-        if (numberStr.includes("999")) {
-            return false;
-        }
-
-        if (numberStr.includes("99")) {
-            return true;
-        }
+    if (numberStr.includes("99")) {
+      return true;
     }
+  }
 
-    function displayHammer() {
-        return `<div style="position: absolute; top: 274px; left: 273px; z-index: 6;">
+  function displayHammer() {
+    return `<div style="position: absolute; top: 274px; left: 273px; z-index: 6;">
       <svg width="140" height="150" viewBox="0 0 294 170" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="197.802" y="38.8684" width="26.7313" height="290.784" transform="rotate(26.2311 197.802 38.8684)" fill="#57504A"/>
 <rect x="131.681" y="0.473633" width="48.2467" height="63.8943" transform="rotate(26.2311 131.681 0.473633)" fill="#D9D9D9"/>
@@ -828,36 +866,36 @@ export default function Viewer() {
 </svg>
 
     </div>`;
+  }
+
+  function c999(number: number) {
+    const numberStr = number.toString();
+    if (numberStr.includes("9999")) {
+      return false;
     }
 
-    function c999(number: number) {
-        const numberStr = number.toString();
-        if (numberStr.includes("9999")) {
-            return false;
-        }
-
-        if (numberStr.includes("999")) {
-            return true;
-        }
+    if (numberStr.includes("999")) {
+      return true;
     }
+  }
 
-    function displayPickaxe() {
-        return `<div style="position: absolute; top: 275px; left: 263px; z-index: 6;">
+  function displayPickaxe() {
+    return `<div style="position: absolute; top: 275px; left: 263px; z-index: 6;">
       <svg width="160" height="150" viewBox="0 0 400 270" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="274.643" y="65.7522" width="29.5691" height="321.654" transform="rotate(28.3886 274.643 65.7522)" fill="#A1662F"/>
 <path d="M379.481 210.387C379.994 189.597 370.555 166.038 352.588 143.268C334.622 120.498 309.105 99.754 279.891 84.1689C250.677 68.5838 219.353 59.0042 190.65 56.8769C161.947 54.7497 137.423 60.1903 120.784 72.3771L167.213 108.109C177.305 100.717 192.18 97.4171 209.59 98.7074C227 99.9977 245.999 105.808 263.719 115.261C281.439 124.714 296.916 137.297 307.813 151.108C318.71 164.919 324.436 179.208 324.125 191.819L379.481 210.387Z" fill="#6FE4FF"/>
 </svg>
 
     </div>`;
-    }
+  }
 
-    function c9999(number: number) {
-        const numberStr = number.toString();
-        return numberStr.includes("9999");
-    }
+  function c9999(number: number) {
+    const numberStr = number.toString();
+    return numberStr.includes("9999");
+  }
 
-    function displayGun() {
-        return `<div style="position: absolute; top: 223px; left: 285px; z-index: 6;">
+  function displayGun() {
+    return `<div style="position: absolute; top: 223px; left: 285px; z-index: 6;">
       <svg width="150" height="202" viewBox="0 0 259 1" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect x="5.54016" y="87.0076" width="10.4078" height="23.8685" transform="rotate(-52.1971 5.54016 87.0076)" fill="#969292"/>
 <rect x="21.8126" y="69.2476" width="10.4078" height="24.3572" transform="rotate(-41.4583 21.8126 69.2476)" fill="#969292"/>
@@ -873,28 +911,28 @@ export default function Viewer() {
 <ellipse cx="55.6587" cy="106.941" rx="7.08666" ry="6.20083" transform="rotate(-18.277 55.6587 106.941)" fill="black"/>
 </svg>
     </div>`;
-    }
+  }
 
-    function cs5(number: number) {
-        const numberStr = number.toString();
-        for (let i = 0; i < numberStr.length - 4; i++) {
-            // Ensure there are at least 3 characters to check
-            const substring = numberStr.substring(i, i + 5); // Get the substring of 3 characters
-            if (!substring.startsWith("0")) {
-                // Exclude substrings starting with '0'
-                const subNum = parseInt(substring, 10);
-                const s = Math.sqrt(subNum);
-                if (s === Math.floor(s)) {
-                    // Check if s is a perfect square
-                    return "cs5d"; // Return a different identifier for 3-digit perfect squares
-                }
-            }
+  function cs5(number: number) {
+    const numberStr = number.toString();
+    for (let i = 0; i < numberStr.length - 4; i++) {
+      // Ensure there are at least 3 characters to check
+      const substring = numberStr.substring(i, i + 5); // Get the substring of 3 characters
+      if (!substring.startsWith("0")) {
+        // Exclude substrings starting with '0'
+        const subNum = parseInt(substring, 10);
+        const s = Math.sqrt(subNum);
+        if (s === Math.floor(s)) {
+          // Check if s is a perfect square
+          return "cs5d"; // Return a different identifier for 3-digit perfect squares
         }
-        return null;
+      }
     }
+    return null;
+  }
 
-    function displaySmoke() {
-        return `<div style="position: absolute; top: 80px;
+  function displaySmoke() {
+    return `<div style="position: absolute; top: 80px;
     left: 3px;
     z-index: 4;">
             
@@ -903,52 +941,52 @@ export default function Viewer() {
 <path d="M935.186 95.5844L951.647 90.4755L950 74.4999L962.537 68.4999V57.4999L985.037 54L967.037 28.2279L985.037 24L989.537 15.2279L1000.04 20.5L1010.54 8L1022.04 17.7721L1033.54 0L1041.04 12.5L1063.54 3.5L1075.54 9L1091.86 3.5V18L1108.89 24L1091.86 43L1086.75 72.3107L1108.89 66.6342L1101.98 86.7738L1108.89 104.667L1131.59 109.492L1147.04 114.317L1123.65 121.788V141.655L1091.86 144.97L1081.07 154.144L1084.48 171.649L1053.26 161.432L1029.42 169.947L1021.47 163.135L985.716 166.423L968.109 171.082L955.321 179.531L943.7 176.758L927.408 186.5L914.75 178.461L906.226 186.268L895 178.87L895.439 165.434L911.344 152.349L909.641 144.402L923.833 129.076L921.562 114.317L935.186 95.5844Z" fill="#D9D9D9"/>
 </svg>
     </div>`;
+  }
+
+  // Function to check if a number contains a 4-digit square as a substring
+  function containsFourDigitSquare(number: number) {
+    const numberStr = number.toString();
+    for (let i = 0; i <= numberStr.length - 4; i++) {
+      const substring = numberStr.substring(i, i + 4);
+      const num = parseInt(substring, 10);
+      if (Math.sqrt(num) % 1 === 0) {
+        return true;
+      }
     }
+    return false;
+  }
 
-    // Function to check if a number contains a 4-digit square as a substring
-    function containsFourDigitSquare(number: number) {
-        const numberStr = number.toString();
-        for (let i = 0; i <= numberStr.length - 4; i++) {
-            const substring = numberStr.substring(i, i + 4);
-            const num = parseInt(substring, 10);
-            if (Math.sqrt(num) % 1 === 0) {
-                return true;
-            }
-        }
-        return false;
-    }
+  // Determine the range for laser eyes based on the digit 5 value
+  function getLaserEyeRange(digits: number[]) {
+    const eyeType = {
+      0: "five_eyes",
+      1: "single_eye",
+      2: "single_eye",
+      3: "single_eye",
+      4: "five_eyes",
+      5: "four_eyes",
+      6: "four_eyes",
+      7: "four_eyes",
+      8: "four_eyes",
+      9: "five_eyes",
+    };
 
-    // Determine the range for laser eyes based on the digit 5 value
-    function getLaserEyeRange(digits: number[]) {
-        const eyeType = {
-            0: "five_eyes",
-            1: "single_eye",
-            2: "single_eye",
-            3: "single_eye",
-            4: "five_eyes",
-            5: "four_eyes",
-            6: "four_eyes",
-            7: "four_eyes",
-            8: "four_eyes",
-            9: "five_eyes",
-        };
+    return eyeType[digits[4] as keyof typeof eyeType];
+  }
 
-        return eyeType[digits[4] as keyof typeof eyeType];
-    }
+  // Function to generate SVG for laser eyes based on direction
+  function displayLaserEyes(digits: number[], eyeType: string) {
+    const colorForFirstDigit = colorMap[digits[0] as keyof typeof colorMap];
 
-    // Function to generate SVG for laser eyes based on direction
-        function displayLaserEyes(digits: number[], eyeType: string) {
-        const colorForFirstDigit = colorMap[digits[0] as keyof typeof colorMap];
-
-        if (eyeType === "four_eyes") {
-            return `
+    if (eyeType === "four_eyes") {
+      return `
       <div style="position: absolute; top: 159px; left: 264px; z-index: 10; transform: rotate(127deg); background: linear-gradient(to top, ${colorForFirstDigit}, red, red); width: 7px; height: 216px;"></div>
 <div style="position: absolute; top: 163px; left: 326px; z-index: 10; transform: rotate(126deg); background: linear-gradient(to top, ${colorForFirstDigit}, red, red); width: 7px; height: 185px;"></div>
 <div style="position: absolute; top: 167px; left: 315px; z-index: 10; transform: rotate(126deg); background: linear-gradient(to top, ${colorForFirstDigit}, red, red); width: 7px; height: 250px;"></div>
 <div style="position: absolute; top: 131px; left: 312px; z-index: 10; transform: rotate(128deg); background: linear-gradient(to top, ${colorForFirstDigit}, #06CDDA, #03F0FF); width: 7px; height: 250px;"></div>
 `;
-        } else if (eyeType === "five_eyes") {
-            return `
+    } else if (eyeType === "five_eyes") {
+      return `
       <div style="    position: absolute;
     top: 153px;
     left: 340px;
@@ -987,8 +1025,8 @@ export default function Viewer() {
     width: 4px;
     height: 216px;"></div>
 `;
-        } else {
-            return `
+    } else {
+      return `
   <div style="position: absolute;
     top: 182px;
     left: 300px;
@@ -998,29 +1036,29 @@ export default function Viewer() {
     width: 7px;
     height: 250px;"> </div>
 `;
-        }
     }
+  }
 
-    function cs6(number: number) {
-        const numberStr = number.toString();
-        for (let i = 0; i < numberStr.length - 5; i++) {
-            // Ensure there are at least 3 characters to check
-            const substring = numberStr.substring(i, i + 6); // Get the substring of 3 characters
-            if (!substring.startsWith("0")) {
-                // Exclude substrings starting with '0'
-                const subNum = parseInt(substring, 10);
-                const s = Math.sqrt(subNum);
-                if (s === Math.floor(s)) {
-                    // Check if s is a perfect square
-                    return "cs3d"; // Return a different identifier for 3-digit perfect squares
-                }
-            }
+  function cs6(number: number) {
+    const numberStr = number.toString();
+    for (let i = 0; i < numberStr.length - 5; i++) {
+      // Ensure there are at least 3 characters to check
+      const substring = numberStr.substring(i, i + 6); // Get the substring of 3 characters
+      if (!substring.startsWith("0")) {
+        // Exclude substrings starting with '0'
+        const subNum = parseInt(substring, 10);
+        const s = Math.sqrt(subNum);
+        if (s === Math.floor(s)) {
+          // Check if s is a perfect square
+          return "cs3d"; // Return a different identifier for 3-digit perfect squares
         }
-        return null;
+      }
     }
+    return null;
+  }
 
-    function displaySonicScrewdriver() {
-        return `<div style="position: absolute; top: 283px; left: 232px; z-index: 5;">
+  function displaySonicScrewdriver() {
+    return `<div style="position: absolute; top: 283px; left: 232px; z-index: 5;">
 <svg width="190" height="45" viewBox="0 0 190 45" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M97.5132 25.5078C97.5132 31.0307 93.036 35.5078 87.5132 35.5078L13.0687 35.5078V11.0674L87.5132 11.0674C93.036 11.0674 97.5132 15.5446 97.5132 21.0674V25.5078Z" fill="url(#paint0_linear_61_1765)"/>
 <rect x="127.672" y="29.9739" width="30.1587" height="12.9119" transform="rotate(-180 127.672 29.9739)" fill="#ADADAD"/>
@@ -1042,76 +1080,76 @@ export default function Viewer() {
 </defs>
 </svg>
     </div>`;
+  }
+
+  function cf3(number: number) {
+    let numberStr = number.toString();
+    let a = 0,
+      b = 1;
+    let fibNumbers = new Set();
+
+    // Generate 3-digit Fibonacci numbers
+    while (b < 1000) {
+      // 1000 is the smallest 4-digit number
+      if (b >= 100) {
+        // 100 is the smallest 3-digit number
+        fibNumbers.add(b.toString());
+      }
+      [a, b] = [b, a + b]; // Update the Fibonacci sequence
     }
 
-    function cf3(number: number) {
-        let numberStr = number.toString();
-        let a = 0,
-            b = 1;
-        let fibNumbers = new Set();
-
-        // Generate 3-digit Fibonacci numbers
-        while (b < 1000) {
-            // 1000 is the smallest 4-digit number
-            if (b >= 100) {
-                // 100 is the smallest 3-digit number
-                fibNumbers.add(b.toString());
-            }
-            [a, b] = [b, a + b]; // Update the Fibonacci sequence
-        }
-
-        // Check for 3-digit Fibonacci patterns
-        for (let i = 0; i <= numberStr.length - 3; i++) {
-            // Loop through the number string
-            let substring = numberStr.substring(i, i + 3);
-            if (fibNumbers.has(substring)) {
-                return "cf3";
-            }
-        }
-
-        return null;
+    // Check for 3-digit Fibonacci patterns
+    for (let i = 0; i <= numberStr.length - 3; i++) {
+      // Loop through the number string
+      let substring = numberStr.substring(i, i + 3);
+      if (fibNumbers.has(substring)) {
+        return "cf3";
+      }
     }
 
-    function displaySaliva() {
-        return `<div style="position: absolute; top: 300px; left: 243px;">
+    return null;
+  }
+
+  function displaySaliva() {
+    return `<div style="position: absolute; top: 300px; left: 243px;">
       <svg width="30" height="61" viewBox="0 0 78 61" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M60.9709 39.8567C65.097 45.834 65.1172 52.9745 61.0162 55.8055C56.9151 58.6364 50.2456 56.0858 46.1195 50.1084C41.9934 44.1311 42.5423 36.1023 42.4257 28.8741C47.2746 31.5969 56.8447 33.8794 60.9709 39.8567Z" fill="#2D62A1"/>
 <path d="M66.0776 15.4591C72.3296 19.1559 75.3417 25.6301 72.8053 29.9196C70.2689 34.2091 63.1446 34.6896 56.8926 30.9928C50.6406 27.296 47.7729 19.7768 44.6366 13.2634C50.1803 13.7025 59.8257 11.7624 66.0776 15.4591Z" fill="#2D62A1"/>
 <path d="M25.9709 16.1084C30.097 22.0857 30.1172 29.2262 26.0162 32.0572C21.9151 34.8881 15.2456 32.3375 11.1195 26.3602C6.99344 20.3828 7.54232 12.354 7.42566 5.12583C12.2746 7.8486 21.8447 10.1311 25.9709 16.1084Z" fill="#2D62A1"/>
 </svg>
     </div>`;
+  }
+
+  function cf4(number: number) {
+    let numberStr = number.toString();
+    let a = 0,
+      b = 1;
+    let fibNumbers = new Set();
+
+    // Generate 4-digit Fibonacci numbers
+    while (b < 10000) {
+      // 10000 is the smallest 5-digit number
+      if (b >= 1000) {
+        // 1000 is the smallest 4-digit number
+        fibNumbers.add(b.toString());
+      }
+      [a, b] = [b, a + b]; // Update the Fibonacci sequence
     }
 
-    function cf4(number: number) {
-        let numberStr = number.toString();
-        let a = 0,
-            b = 1;
-        let fibNumbers = new Set();
-
-        // Generate 4-digit Fibonacci numbers
-        while (b < 10000) {
-            // 10000 is the smallest 5-digit number
-            if (b >= 1000) {
-                // 1000 is the smallest 4-digit number
-                fibNumbers.add(b.toString());
-            }
-            [a, b] = [b, a + b]; // Update the Fibonacci sequence
-        }
-
-        // Check for 4-digit Fibonacci patterns
-        for (let i = 0; i <= numberStr.length - 4; i++) {
-            // Loop through the number string
-            let substring = numberStr.substring(i, i + 4);
-            if (fibNumbers.has(substring)) {
-                return "cf4"; // Return identifier for 4-digit Fibonacci numbers
-            }
-        }
-
-        return null;
+    // Check for 4-digit Fibonacci patterns
+    for (let i = 0; i <= numberStr.length - 4; i++) {
+      // Loop through the number string
+      let substring = numberStr.substring(i, i + 4);
+      if (fibNumbers.has(substring)) {
+        return "cf4"; // Return identifier for 4-digit Fibonacci numbers
+      }
     }
 
-    function displayAbduction() {
-        return `<div style="position: absolute; top: -310px; left: 65px; z-index:9;">
+    return null;
+  }
+
+  function displayAbduction() {
+    return `<div style="position: absolute; top: -310px; left: 65px; z-index:9;">
       <svg width="300" height="500" viewBox="0 0 668 10" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M183 0H444L668 805H0L183 0Z" fill="url(#paint0_linear_61_1754)" fill-opacity="0.2"/>
 <defs>
@@ -1122,75 +1160,75 @@ export default function Viewer() {
 </defs>
 </svg>
     </div>`;
+  }
+
+  function cf5(number: number) {
+    let numberStr = number.toString();
+    let a = 0,
+      b = 1;
+    let fibNumbers = new Set();
+
+    // Generate 5-digit Fibonacci numbers
+    while (b < 100000) {
+      // 100000 is the smallest 6-digit number
+      if (b >= 10000) {
+        // 10000 is the smallest 5-digit number
+        fibNumbers.add(b.toString());
+      }
+      [a, b] = [b, a + b]; // Update the Fibonacci sequence
     }
 
-    function cf5(number: number) {
-        let numberStr = number.toString();
-        let a = 0,
-            b = 1;
-        let fibNumbers = new Set();
-
-        // Generate 5-digit Fibonacci numbers
-        while (b < 100000) {
-            // 100000 is the smallest 6-digit number
-            if (b >= 10000) {
-                // 10000 is the smallest 5-digit number
-                fibNumbers.add(b.toString());
-            }
-            [a, b] = [b, a + b]; // Update the Fibonacci sequence
-        }
-
-        // Check for 5-digit Fibonacci patterns
-        for (let i = 0; i <= numberStr.length - 5; i++) {
-            // Loop through the number string
-            let substring = numberStr.substring(i, i + 5);
-            if (fibNumbers.has(substring)) {
-                return "cf5";
-            }
-        }
-
-        return null;
+    // Check for 5-digit Fibonacci patterns
+    for (let i = 0; i <= numberStr.length - 5; i++) {
+      // Loop through the number string
+      let substring = numberStr.substring(i, i + 5);
+      if (fibNumbers.has(substring)) {
+        return "cf5";
+      }
     }
 
-    function displayBlood() {
-        return `<div style="position: absolute; top: 295px; left: 173px;">
+    return null;
+  }
+
+  function displayBlood() {
+    return `<div style="position: absolute; top: 295px; left: 173px;">
       <svg width="20" height="69" viewBox="0 0 51 69" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M47.001 24.4103C27.5364 32.8462 31.0396 68.5 8 68.5C-15.0396 68.5 23.8343 47.828 23.8343 31.7692C23.8343 15.7105 37.6248 20.641 47.001 0C55.9987 22.0769 47.001 8.35151 47.001 24.4103Z" fill="#F80000"/>
 </svg>
 
     </div>`;
+  }
+
+  function cf6(number: number) {
+    let numberStr = number.toString();
+    let a = 0,
+      b = 1;
+    let fibNumbers = new Set();
+
+    // Generate 6-digit Fibonacci numbers
+    while (b < 1000000) {
+      // 1000000 is the smallest 7-digit number
+      if (b >= 100000) {
+        // 100000 is the smallest 6-digit number
+        fibNumbers.add(b.toString());
+      }
+      [a, b] = [b, a + b]; // Update the Fibonacci sequence
     }
 
-    function cf6(number: number) {
-        let numberStr = number.toString();
-        let a = 0,
-            b = 1;
-        let fibNumbers = new Set();
-
-        // Generate 6-digit Fibonacci numbers
-        while (b < 1000000) {
-            // 1000000 is the smallest 7-digit number
-            if (b >= 100000) {
-                // 100000 is the smallest 6-digit number
-                fibNumbers.add(b.toString());
-            }
-            [a, b] = [b, a + b]; // Update the Fibonacci sequence
-        }
-
-        // Check for 6-digit Fibonacci patterns
-        for (let i = 0; i <= numberStr.length - 6; i++) {
-            // Loop through the number string
-            let substring = numberStr.substring(i, i + 6);
-            if (fibNumbers.has(substring)) {
-                return "cf6";
-            }
-        }
-
-        return null;
+    // Check for 6-digit Fibonacci patterns
+    for (let i = 0; i <= numberStr.length - 6; i++) {
+      // Loop through the number string
+      let substring = numberStr.substring(i, i + 6);
+      if (fibNumbers.has(substring)) {
+        return "cf6";
+      }
     }
 
-    function displayScar() {
-        return `<div style="position: absolute; top: 140px; left: 151px;">
+    return null;
+  }
+
+  function displayScar() {
+    return `<div style="position: absolute; top: 140px; left: 151px;">
       <svg width="25" height="73" viewBox="0 0 44 73" fill="none" xmlns="http://www.w3.org/2000/svg">
 <line x1="1.01965" y1="1.89985" x2="42.0196" y2="39.8999" stroke="black" stroke-width="3"/>
 <line x1="42.2401" y1="39.4807" x2="5.24011" y2="45.4807" stroke="black" stroke-width="3"/>
@@ -1198,52 +1236,52 @@ export default function Viewer() {
 </svg>
 
     </div>`;
+  }
+
+  function cf7(number: number) {
+    let numberStr = number.toString();
+    let a = 0,
+      b = 1;
+    let fibNumbers = new Set();
+
+    // Generate 6-digit Fibonacci numbers
+    while (b < 10000000) {
+      // 10000000 is the smallest 8-digit number
+      if (b >= 1000000) {
+        // 1000000 is the smallest 7-digit number
+        fibNumbers.add(b.toString());
+      }
+      [a, b] = [b, a + b]; // Update the Fibonacci sequence
     }
 
-    function cf7(number: number) {
-        let numberStr = number.toString();
-        let a = 0,
-            b = 1;
-        let fibNumbers = new Set();
-
-        // Generate 6-digit Fibonacci numbers
-        while (b < 10000000) {
-            // 10000000 is the smallest 8-digit number
-            if (b >= 1000000) {
-                // 1000000 is the smallest 7-digit number
-                fibNumbers.add(b.toString());
-            }
-            [a, b] = [b, a + b]; // Update the Fibonacci sequence
-        }
-
-        // Check for 6-digit Fibonacci patterns
-        for (let i = 0; i <= numberStr.length - 7; i++) {
-            // Loop through the number string
-            let substring = numberStr.substring(i, i + 7);
-            if (fibNumbers.has(substring)) {
-                return "cf7";
-            }
-        }
-
-        return null;
+    // Check for 6-digit Fibonacci patterns
+    for (let i = 0; i <= numberStr.length - 7; i++) {
+      // Loop through the number string
+      let substring = numberStr.substring(i, i + 7);
+      if (fibNumbers.has(substring)) {
+        return "cf7";
+      }
     }
 
-    function displayTired() {
-        return `<div style="position: absolute; top: 233px; left: 245px; z-index:9;">
+    return null;
+  }
+
+  function displayTired() {
+    return `<div style="position: absolute; top: 233px; left: 245px; z-index:9;">
       <svg width="45" height="117" viewBox="0 0 95 117" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M14.5942 105V100.49L27.9465 83.9595V83.7642H15.0558V77.7273H37.0551V82.6456L24.5196 98.7678V98.9631H37.5168V105H14.5942Z" fill="black"/>
 <path d="M39.5942 87V82.4901L52.9465 65.9595V65.7642H40.0558V59.7273H62.0551V64.6456L49.5196 80.7678V80.9631H62.5168V87H39.5942Z" fill="black"/>
 <path d="M57.5942 49V44.4901L70.9465 27.9595V27.7642H58.0558V21.7273H80.0551V26.6456L67.5196 42.7678V42.9631H80.5168V49H57.5942Z" fill="black"/>
 </svg>
     </div>`;
-    }
+  }
 
-    function m12(number: number) {
-        return number % 12 === 0;
-    }
+  function m12(number: number) {
+    return number % 12 === 0;
+  }
 
-    function displaySpikyHair() {
-        return `<div style="position: absolute; top: 11px; left: 90px;">
+  function displaySpikyHair() {
+    return `<div style="position: absolute; top: 11px; left: 90px;">
       <svg width="238.2" height="215" viewBox="0 0 570 215" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M35.4299 6.03382L96.4236 146.617L35.0571 156.163L35.4299 6.03382Z" fill="#FF6B00"/>
 <path d="M533.277 16.208L551.226 165.535L489.056 161.398L533.277 16.208Z" fill="#FF6B00"/>
@@ -1263,27 +1301,27 @@ export default function Viewer() {
 </svg>
 
     </div>`;
-    }
+  }
 
-    function m13(number: number) {
-        return number % 13 === 0;
-    }
+  function m13(number: number) {
+    return number % 13 === 0;
+  }
 
-    function displayBunnyTeeth() {
-        return `<div style="position: absolute; top: 272px; left: 205px; z-index: 1;">
+  function displayBunnyTeeth() {
+    return `<div style="position: absolute; top: 272px; left: 205px; z-index: 1;">
 <svg width="30" height="36" viewBox="0 0 59 36" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M0.5 4L12.5 1L20.5 0H29H36.5L45.5 1L53.5 2L59 3.5L58.5 36H1.5L0.5 4Z" fill="#D9D9D9"/>
 <line x1="30.5" x2="30.5" y2="36" stroke="black"/>
 </svg>
     </div>`;
-    }
+  }
 
-    function m14(number: number ) {
-        return number % 14 === 0;
-    }
+  function m14(number: number) {
+    return number % 14 === 0;
+  }
 
-    function displayBuildersHat() {
-        return `<div style="position: absolute; top: -159px; left: 105px;">
+  function displayBuildersHat() {
+    return `<div style="position: absolute; top: -159px; left: 105px;">
                 
 <svg width="215" height="485" viewBox="0 0 517 200" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M517 242.5C517 178.185 489.765 116.504 441.287 71.0266C392.809 25.549 327.058 4.85565e-06 258.5 0C189.942 -4.85565e-06 124.191 25.549 75.7129 71.0266C27.2348 116.504 1.0352e-05 178.185 0 242.5L258.5 242.5H517Z" fill="url(#paint0_linear_60_1731)"/>
@@ -1311,26 +1349,26 @@ export default function Viewer() {
 </svg>
 
     </div>`;
-    }
+  }
 
-    function m15(number: number) {
-        return number % 15 === 0;
-    }
+  function m15(number: number) {
+    return number % 15 === 0;
+  }
 
-    function displayLongHair() {
-        return `<div style="position: absolute; top: 66px; left: 57px;">
+  function displayLongHair() {
+    return `<div style="position: absolute; top: 66px; left: 57px;">
 <svg width="300" height="215" viewBox="0 0 593 215" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M43.1727 45.9672C44.578 35.4196 52.2687 26.7928 62.5865 24.1906L155.37 0.789474C157.449 0.265172 159.584 0 161.728 0H295L446.932 13.812C448.308 13.9371 449.673 14.1718 451.012 14.5139L546.619 38.933C557.328 41.6682 565.137 50.8749 566.088 61.8866L592.671 369.613C593.49 379.097 589.06 388.271 581.123 393.528L555.918 410.22C539.259 421.252 516.9 410.153 515.615 390.214L500.168 150.368C499.739 143.712 496.769 137.475 491.871 132.947L419.444 65.9949C415.573 62.4163 410.706 60.0991 405.487 59.3505L297.882 43.9134C295.967 43.6387 294.027 43.5786 292.098 43.7342L191.926 51.8198C186.45 52.2619 181.254 54.4275 177.085 58.0059L128.185 99.975C122.945 104.473 119.709 110.87 119.192 117.756L99.3849 381.271C98.1526 397.666 82.2028 408.815 66.3821 404.34L19.6706 391.129C7.23219 387.611 -0.732847 375.49 0.974369 362.677L43.1727 45.9672Z" fill="#F3E45E"/>
 </svg>
     </div>`;
-    }
+  }
 
-    function m16(number: number) {
-        return number % 16 === 0;
-    }
+  function m16(number: number) {
+    return number % 16 === 0;
+  }
 
-        function displayHoodie() {
-        return `<div style="position: absolute; top: 105px; left: 11.5px; z-index: 2;">               
+  function displayHoodie() {
+    return `<div style="position: absolute; top: 105px; left: 11.5px; z-index: 2;">               
 <svg width="400" height="320" viewBox="0 0 600 710" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M289.135 598.278L581 713.3L0.500001 713.5L289.135 598.278Z" fill="#272424"/>
 <path d="M151.75 527L297.714 591.657L431.44 527L431.44 589.5L430.739 651.6L151.75 649.098L151.75 527Z" fill="#272424"/>
@@ -1344,14 +1382,14 @@ export default function Viewer() {
 <path d="M295 557L426.5 519.5L543 474L543 525L295 593L295 557Z" fill="#272424"/>
 </svg>
     </div>`;
-    }
+  }
 
-    function m69(number: number) {
-        return number % 69 === 0;
-    }
+  function m69(number: number) {
+    return number % 69 === 0;
+  }
 
-    function displayWifHat() {
-        return `<div style="position: absolute; top: -43px; left: 85px;">
+  function displayWifHat() {
+    return `<div style="position: absolute; top: -43px; left: 85px;">
                 
 
       <svg width="250" height="250" viewBox="0 0 129 82" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1374,27 +1412,27 @@ export default function Viewer() {
 </defs>
 </svg>
             </div>`;
-    }
+  }
 
-    function m11(number: number) {
-        return number % 11 === 0;
-    }
+  function m11(number: number) {
+    return number % 11 === 0;
+  }
 
-    function displayTongue() {
-        return `<div style="position: absolute; top: 240px; left: 202px; z-index: 5;">
+  function displayTongue() {
+    return `<div style="position: absolute; top: 240px; left: 202px; z-index: 5;">
       <svg width="100" height="150" viewBox="0 0 192 110" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M0 62L60 58.5L191.023 139.326L113.854 135.02L120.408 199.845L0 62Z" fill="#E40000"/>
 <line x1="111.657" y1="133.364" x2="41.657" y2="67.3638" stroke="black"/>
 </svg>
     </div>`;
-    }
+  }
 
-    function m888(number: number) {
-        return number % 888 === 0;
-    }
+  function m888(number: number) {
+    return number % 888 === 0;
+  }
 
-    function displayShield() {
-        return `<div style="position: absolute; top: 274px; left: 8px; z-index: 6;">
+  function displayShield() {
+    return `<div style="position: absolute; top: 274px; left: 8px; z-index: 6;">
        
 <svg width="175" height="150" viewBox="0 0 233 205" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect width="118.69" height="115.679" transform="matrix(0.829823 0.558027 -0.530394 0.847751 96.8952 24.9885)" fill="#A1662F"/>
@@ -1424,25 +1462,25 @@ export default function Viewer() {
 <line y1="-2" x2="110.13" y2="-2" transform="matrix(-0.976451 0.215739 -0.0015228 -0.999999 201.766 174.635)" stroke="#4F4F4F" stroke-width="4"/>
 </svg>
     </div>`;
-    }
+  }
 
-    function ce7(number: number) {
-        let numberStr = number.toString();
-        let exponent = 7;
-        let power = 1;
-        while (true) {
-            let exponentStr = Math.pow(exponent, power).toString();
-            if (numberStr.includes(exponentStr)) {
-                return true;
-            }
-            if (Math.pow(exponent, power) > number) break; // Stop if the exponent value exceeds the number
-            power++;
-        }
-        return false;
+  function ce7(number: number) {
+    let numberStr = number.toString();
+    let exponent = 7;
+    let power = 1;
+    while (true) {
+      let exponentStr = Math.pow(exponent, power).toString();
+      if (numberStr.includes(exponentStr)) {
+        return true;
+      }
+      if (Math.pow(exponent, power) > number) break; // Stop if the exponent value exceeds the number
+      power++;
     }
+    return false;
+  }
 
-    function displayLipsVision() {
-        return `<div style="position: absolute;     top: 254px;
+  function displayLipsVision() {
+    return `<div style="position: absolute;     top: 254px;
     left: 171px;
     z-index: 2;">
         <svg width="100" height="94" viewBox="0 0 218 94" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -1452,128 +1490,122 @@ export default function Viewer() {
 <path d="M218 93.5C218 81.2214 215.181 69.063 209.703 57.7191C204.225 46.3752 196.196 36.0678 186.075 27.3855C175.953 18.7032 163.937 11.8161 150.712 7.11726C137.488 2.41845 123.314 -5.36714e-07 109 0C94.6859 5.36715e-07 80.512 2.41845 67.2875 7.11727C54.063 11.8161 42.0469 18.7032 31.9254 27.3855C21.8038 36.0678 13.7749 46.3752 8.29713 57.7191C2.81937 69.063 -1.25138e-06 81.2214 0 93.5L109 93.5H218Z" stroke="#8B0909" stroke-width="26" mask="url(#path-1-inside-1_48_758)"/>
 </svg>
             </div>`;
+  }
+
+  //fixed elements
+  function generateHtmlBasedOnBlockNumber(blockNumber: string) {
+    const originalString = blockNumber;
+    const blockNumberNumber = parseInt(blockNumber);
+    const digits = originalString
+      .padStart(7, "0")
+      .split("")
+      .map(Number)
+      .reverse();
+
+    const lookType = getLook(blockNumberNumber);
+    const lookHtml = generateLookSvg(digits, lookType);
+    const eyeType =
+      originalString.length >= 5 ? getLaserEyeRange(digits) : "single_eye";
+    let sonicScrewdriver = c420(blockNumberNumber)
+      ? displaySonicScrewdriver()
+      : "";
+    let cig = c4a0(blockNumberNumber) ? displaycig() : "";
+    let spikyHair = c0(blockNumberNumber) ? displaySpikyHair() : "";
+    let longHair = c00(blockNumberNumber) ? displayLongHair() : "";
+    let buildersHat = c000(blockNumberNumber) ? displayBuildersHat() : "";
+    let hoodie = c0000(blockNumberNumber) ? displayHoodie() : "";
+    let wifHat = c00000(blockNumberNumber) ? displayWifHat() : "";
+    let stud = c11(blockNumberNumber) ? displayStud() : "";
+    let hoops = c111(blockNumberNumber) ? displayHoops() : "";
+    let headphones = c1111(blockNumberNumber) ? displayHeadphones() : "";
+    let smoke = c11111(blockNumberNumber) ? displaySmoke() : "";
+    let necklace = c8a8(blockNumberNumber) ? displayNecklace() : "";
+    let scarf = c88(blockNumberNumber) ? displayScarf() : "";
+    let tShirt = c888(blockNumberNumber) ? displayTShirt() : "";
+    let highVis = c8888(blockNumberNumber) ? displayHighVis() : "";
+    let suit = c88888(blockNumberNumber) ? displaySuit() : "";
+    let goatee = cp6(blockNumberNumber) ? displayGoatee() : "";
+    let earWound = cs5(blockNumberNumber) ? displayEarWound() : "";
+    let diamond = cs6(blockNumberNumber) ? displayDiamond() : "";
+    let balloon = c9a9(blockNumberNumber) ? displayBalloon() : "";
+    let hammer = c99(blockNumberNumber) ? displayHammer() : "";
+    let pickaxe = c999(blockNumberNumber) ? displayPickaxe() : "";
+    let gun = c9999(blockNumberNumber) ? displayGun() : "";
+    let saliva = cf3(blockNumberNumber) ? displaySaliva() : "";
+    let blood = cf4(blockNumberNumber) ? displayBlood() : "";
+    let abduction = cf5(blockNumberNumber) ? displayAbduction() : "";
+    let scar = cf6(blockNumberNumber) ? displayScar() : "";
+    let tired = cf7(blockNumberNumber) ? displayTired() : "";
+    let tongue = m11(blockNumberNumber) ? displayTongue() : "";
+    let shield = m888(blockNumberNumber) ? displayShield() : "";
+    let lips = ce7(blockNumberNumber) ? displayLipsVision() : "";
+    let squint = m12(blockNumberNumber) ? displaySquint(lookType, eyeType) : "";
+    let bunnyTeeth = m13(blockNumberNumber) ? displayBunnyTeeth() : "";
+    let tash = m14(blockNumberNumber) ? displayTash() : "";
+    let eyeLash = m15(blockNumberNumber) ? displayEyeLash(eyeType) : "";
+    let bloodShot = m16(blockNumberNumber) ? displayBloodShot(eyeType) : "";
+    let monocle = m69(blockNumberNumber) ? displayMonocle() : "";
+    let mouth = displayMouth(originalString, digits, bunnyTeeth);
+    const containsSquare = containsFourDigitSquare(blockNumberNumber);
+    const laserEyes = containsSquare ? displayLaserEyes(digits, eyeType) : "";
+    const eyes = displayEyes(originalString, digits, lookType);
+    const background =
+      originalString.length >= 2 ? displayBackground(digits, lookType) : "";
+
+    //construction
+    setHtmlContent(
+      squint +
+        eyeLash +
+        tash +
+        monocle +
+        lips +
+        lookHtml +
+        eyes +
+        background +
+        cig +
+        diamond +
+        stud +
+        earWound +
+        hoops +
+        longHair +
+        hoodie +
+        scarf +
+        necklace +
+        tShirt +
+        spikyHair +
+        buildersHat +
+        wifHat +
+        mouth +
+        highVis +
+        suit +
+        balloon +
+        hammer +
+        pickaxe +
+        gun +
+        smoke +
+        sonicScrewdriver +
+        abduction +
+        saliva +
+        scar +
+        tired +
+        tongue +
+        blood +
+        shield +
+        goatee +
+        bloodShot +
+        headphones +
+        laserEyes
+    );
+  }
+
+  useEffect(() => {
+    if (blockNumber) {
+      generateHtmlBasedOnBlockNumber(blockNumber);
     }
-
-    //fixed elements
-    function generateHtmlBasedOnBlockNumber(blockNumber: string ) {
-        const originalString = blockNumber;
-        const blockNumberNumber = parseInt(blockNumber);
-        const digits = originalString
-            .padStart(7, "0")
-            .split("")
-            .map(Number)
-            .reverse();
-
-        const lookType = getLook(blockNumberNumber);
-        const lookHtml = generateLookSvg(digits, lookType);
-        const eyeType =
-            originalString.length >= 5
-                ? getLaserEyeRange(digits)
-                : "single_eye";
-        let sonicScrewdriver = c420(blockNumberNumber)
-            ? displaySonicScrewdriver()
-            : "";
-        let cig = c4a0(blockNumberNumber) ? displaycig() : "";
-        let spikyHair = c0(blockNumberNumber) ? displaySpikyHair() : "";
-        let longHair = c00(blockNumberNumber) ? displayLongHair() : "";
-        let buildersHat = c000(blockNumberNumber) ? displayBuildersHat() : "";
-        let hoodie = c0000(blockNumberNumber) ? displayHoodie() : "";
-        let wifHat = c00000(blockNumberNumber) ? displayWifHat() : "";
-        let stud = c11(blockNumberNumber) ? displayStud() : "";
-        let hoops = c111(blockNumberNumber) ? displayHoops() : "";
-        let headphones = c1111(blockNumberNumber) ? displayHeadphones() : "";
-        let smoke = c11111(blockNumberNumber) ? displaySmoke() : "";
-        let necklace = c8a8(blockNumberNumber) ? displayNecklace() : "";
-        let scarf = c88(blockNumberNumber) ? displayScarf() : "";
-        let tShirt = c888(blockNumberNumber) ? displayTShirt() : "";
-        let highVis = c8888(blockNumberNumber) ? displayHighVis() : "";
-        let suit = c88888(blockNumberNumber) ? displaySuit() : "";
-        let goatee = cp6(blockNumberNumber) ? displayGoatee() : "";
-        let earWound = cs5(blockNumberNumber) ? displayEarWound() : "";
-            let diamond = cs6(blockNumberNumber) ? displayDiamond() : "";
-        let balloon = c9a9(blockNumberNumber) ? displayBalloon() : "";
-        let hammer = c99(blockNumberNumber) ? displayHammer() : "";
-        let pickaxe = c999(blockNumberNumber) ? displayPickaxe() : "";
-        let gun = c9999(blockNumberNumber) ? displayGun() : "";
-        let saliva = cf3(blockNumberNumber) ? displaySaliva() : "";
-        let blood = cf4(blockNumberNumber) ? displayBlood() : "";
-        let abduction = cf5(blockNumberNumber) ? displayAbduction() : "";
-        let scar = cf6(blockNumberNumber) ? displayScar() : "";
-        let tired = cf7(blockNumberNumber) ? displayTired() : "";
-        let tongue = m11(blockNumberNumber) ? displayTongue() : "";
-        let shield = m888(blockNumberNumber) ? displayShield() : "";
-        let lips = ce7(blockNumberNumber) ? displayLipsVision() : "";
-        let squint = m12(blockNumberNumber) ? displaySquint(lookType, eyeType) : "";
-        let bunnyTeeth = m13(blockNumberNumber) ? displayBunnyTeeth() : "";
-        let tash = m14(blockNumberNumber) ? displayTash() : "";
-        let eyeLash = m15(blockNumberNumber) ? displayEyeLash(eyeType) : "";
-        let bloodShot = m16(blockNumberNumber) ? displayBloodShot(eyeType) : "";
-        let monocle = m69(blockNumberNumber) ? displayMonocle() : "";
-        let mouth = displayMouth(originalString, digits, bunnyTeeth);
-        const containsSquare = containsFourDigitSquare(blockNumberNumber);
-        const laserEyes = containsSquare
-            ? displayLaserEyes(digits, eyeType)
-            : "";
-        const eyes = displayEyes(originalString, digits, lookType);
-        const background =
-            originalString.length >= 2
-                ? displayBackground(digits, lookType)
-                : "";
-
-        //construction
-        setHtmlContent(
-            squint +
-            eyeLash +
-            tash +
-            monocle +
-            lips +
-            lookHtml +
-            eyes +
-            background +
-            cig +
-            diamond +
-            stud +
-            earWound +
-            hoops +
-            longHair +
-            hoodie +
-            scarf +
-            necklace +
-            tShirt +
-            spikyHair +
-            buildersHat +
-            wifHat +
-            mouth +
-            highVis +
-            suit +
-            balloon +
-            hammer +
-            pickaxe +
-            gun +
-            smoke +
-            sonicScrewdriver +
-            abduction +
-            saliva +
-            scar +
-            tired +
-            tongue +
-            blood +
-            shield +
-            goatee +
-            bloodShot +
-            headphones +
-            laserEyes
-        );
+    if (blockNumber === "") {
+      setHtmlContent("");
     }
-
-    useEffect(() => {
-        if (blockNumber) {
-            generateHtmlBasedOnBlockNumber(blockNumber);
-        }
-        if (blockNumber === "") {
-            setHtmlContent("");
-        }
-    }, [blockNumber, generateHtmlBasedOnBlockNumber]);
+  }, [blockNumber, generateHtmlBasedOnBlockNumber]);
 
   return (
     <div className="flex min-h-[500px] flex-col gap-4 lg:flex-row">
@@ -1589,7 +1621,7 @@ export default function Viewer() {
             type="number"
             className="input-bordered input-warning input w-full max-w-xs"
             onChange={(e) => {
-                setBlockNumber(e.target.value);
+              setBlockNumber(e.target.value);
             }}
             placeholder="Enter block number..."
           />
@@ -1598,16 +1630,18 @@ export default function Viewer() {
 
       <div className="flex flex-1 flex-col items-center justify-center">
         {htmlContent ? (
-          <div 
+          <div
             className="relative h-[425px] w-[425px]"
             dangerouslySetInnerHTML={{ __html: htmlContent }}
           />
         ) : (
           <div className="h-[425px] w-[425px] bg-gray-300 flex items-center justify-center">
-            <p className="text-gray-500">Enter a block number to generate a Monstoorz</p>
+            <p className="text-gray-500">
+              Enter a block number to generate a Monstoorz
+            </p>
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }
