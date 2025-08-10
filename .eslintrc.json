@@ -1,0 +1,8 @@
+{
+    "extends": ["next/core-web-vitals"],
+    "rules": {
+        "import/order": "error",
+        "react/prop-types": "off",
+        "react/react-in-jsx-scope": "off"
+    }
+}
